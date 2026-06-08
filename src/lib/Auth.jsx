@@ -52,6 +52,10 @@ export async function Signin(email, password) {
 }
 
 export async function getUserProfile(userId) {
+  if (!userId || userId === 'undefined') {
+    console.warn("getUserProfile called with invalid or undefined userId:", userId);
+    return null;
+  }
   const { data: sessionData } = await supabase.auth.getSession();
   const {data : userData, error} = await supabase.from('users')
   .select('*')

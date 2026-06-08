@@ -16,7 +16,7 @@ const SignIn = () => {
   const navigate = useNavigate()
 
   const handleSubmit = async (event)=>{
-    event.preventDefualt()
+    event.preventDefault()
 
     setIsLoading(true)
     setError(null);
@@ -29,6 +29,8 @@ const SignIn = () => {
       
     } catch (error) {
       console.error('error',error)
+      setError(error.message)
+      setIsLoading(false)
     }
   }
 
