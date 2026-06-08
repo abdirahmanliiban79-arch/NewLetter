@@ -6,7 +6,7 @@ import { IoMdClose } from "react-icons/io";
 
 
 const Header = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isDropdown, setIsDropdown] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -30,31 +30,31 @@ const Header = () => {
             <nav className="mt-1">
               <Link
                 to="/"
-                className="hidden md:inline-block px-3 py-2 rounded-md text-sm font-medium text-gray-900 md:ml-8 border-b-2 border-rose-500"
+                className="hidden sm:p-1 sm:inline-block md:inline-block md:px-3 md:py-2 rounded-md text-sm font-medium text-gray-900 md:ml-8 border-b-2 border-rose-500"
               >
                 Home
               </Link>
               <Link
                 to="/articles"
-                className="hidden md:inline-block px-3 py-2 rounded-md text-sm font-medium text-gray-900 md:ml-8 border-b-2 border-transparent"
+                className="hidden sm:p-1 md:inline-block px-3 py-2 rounded-md text-sm font-medium text-gray-900 md:ml-8 border-b-2 border-transparent"
               >
                 Articles
               </Link>
               <Link
                 to="/write"
-                className="hidden md:inline-block px-3 py-2 rounded-md text-sm font-medium text-gray-900 md:ml-8 border-b-2 border-transparent"
+                className="hidden sm:p-1 md:inline-block px-3 py-2 rounded-md text-sm font-medium text-gray-900 md:ml-8 border-b-2 border-transparent"
               >
                 Write
               </Link>
               <Link
                 to="/articles"
-                className="hidden md:inline-block px-3 py-2 rounded-md text-sm font-medium text-gray-900 md:ml-8 border-b-2 border-transparent"
+                className="hidden sm:p-1 md:inline-block px-3 py-2 rounded-md text-sm font-medium text-gray-900 md:ml-8 border-b-2 border-transparent"
               >
                 Article
               </Link>
               <Link
                 to="/article/:id"
-                className="hidden md:inline-block px-3 py-2 rounded-md text-sm font-medium text-gray-900 md:ml-8 border-b-2 border-transparent"
+                className="hidden sm:p-1 md:inline-block px-3 py-2 rounded-md text-sm font-medium text-gray-900 md:ml-8 border-b-2 border-transparent"
               >
                 My Articles
               </Link>
@@ -107,17 +107,17 @@ const Header = () => {
                 </div>
               </div>
             ) : (
-              <div className="space-x-2">
+              <div className="space-x-2 sm:flex">
                 <Link
                   to="signin"
                   className="hidden px-2 py-2 bg-rose-500 hover:bg-rose-550 border border-transparent focus-outline-none focus:ring-2 focus:ring-offset-2
-            focus:ring-rose-500 sm:inline-flex items-center rounded-md text-white"
+            focus:ring-rose-500 sm:inline-flex sm:flex-shrink-0 items-center rounded-md text-white"
                 >
                   Sign In
                 </Link>
                 <Link
                   to="/signup"
-                  className="focus:outline-none focus:ring-2 focus:ring-offset-2 hover:bg-rose-300 px-2 py-2 border border-transparent hidden sm:inline-flex items-center rounded-md border-none"
+                  className="focus:outline-none focus:ring-2 focus:ring-rose-500 hover:bg-rose-300 px-2 py-2 border border-transparent hidden sm:inline-flex items-center sm:flex-shrink-0 text-black rounded-md border-none"
                 >
                   Sign Up
                 </Link>

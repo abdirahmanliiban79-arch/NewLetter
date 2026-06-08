@@ -6,10 +6,12 @@ import SignIn from "./Pages/SignIn"
 import SignUp from "./Pages/SignUp"
 import Header from "./components/Header"
 import Footer from "./components/Footer"
+import { AuthProvider } from "./Context/AuthContext"
 function App() {
 
   return (
-    <div>
+
+    <AuthProvider>
       {/* header section */}
       <Header/>
       <main>
@@ -26,7 +28,7 @@ function App() {
       </main>
       {/* footer section */}
       <Footer/>
-    </div>
+    </AuthProvider>
   )
 }
 
