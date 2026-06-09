@@ -3,15 +3,16 @@ import { Link } from "react-router";
 import { FaUser } from "react-icons/fa";
 import { CiMenuBurger } from "react-icons/ci";
 import { IoMdClose } from "react-icons/io";
+import { useAuth } from "../Context/AuthContext";
 
 
 const Header = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isDropdown, setIsDropdown] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  const Avatar_url = 
-  "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8cHJvZmlsZSUyMHBpY3R1cmV8ZW58MHx8MHx8fDA%3D";
+  const { isLoggedIn, profile, user , logout} = useAuth()
+  console.log('userProfile', profile)
+  const Avatar_url = null
+  // "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8cHJvZmlsZSUyMHBpY3R1cmV8ZW58MHx8MHx8fDA%3D";
 
   return (
     <header className="bg-white shadow-md">
@@ -67,7 +68,9 @@ const Header = () => {
               <div className="flex items-center space-x-1.5">
                 <div>
                   <span className="text-gray-900 font-semibold">
-                    Hello Welcome
+                    Hey,{" "}
+                    {user?.user_metadata?.username ||
+                      user?.email?.split("@")[0]}
                   </span>
                 </div>
                 <div className="relative">
@@ -93,13 +96,22 @@ const Header = () => {
                       className="absolute top-12 right-5 w-30 bg-white shadow-md rounded px-2 py-1 z-10 h-27 overflow-hidden"
                       onMouseLeave={() => setIsDropdown(false)}
                     >
-                      <Link className="block py-1 hover:bg-gray-100 font-semibold">
+                      <Link
+                        to="/profile"
+                        className="block py-1 hover:bg-gray-100 font-semibold"
+                      >
                         Profile
                       </Link>
-                      <Link className="block py-1 hover:bg-gray-100 font-semibold">
+                      <Link
+                        to={"/articles/:id"}
+                        className="block py-1 hover:bg-gray-100 font-semibold"
+                      >
                         My Articles
                       </Link>
-                      <Link className="block py-1 hover:bg-gray-100 font-semibold">
+                      <Link
+                        onClick={() => logout()}
+                        className="block py-1 hover:bg-gray-100 font-semibold"
+                      >
                         Sign Out
                       </Link>
                     </div>
@@ -177,7 +189,10 @@ const Header = () => {
               <Link className="block px-3 py-2 rounded-md text-sm font-medium text-gray-900 md:ml-8 border-l-2 border-transparent">
                 Profile
               </Link>
-              <Link className="block px-3 py-2 rounded-md text-sm font-medium text-gray-900 md:ml-8 border-l-2 border-transparent">
+              <Link
+                onClick={() => logout()}
+                className="block px-3 py-2 rounded-md text-sm font-medium text-gray-900 md:ml-8 border-l-2 border-transparent"
+              >
                 Sign Out
               </Link>
             </div>

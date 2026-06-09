@@ -1,35 +1,40 @@
 import supabase from "./supabase";
 
 export async function Signup(email, password, username = '') {
-  let { data,error } = await supabase.auth.signUp({
-      email: email,
-      password: password
-  });
-  if(error) throw error
-
-  if(data?.user){
-    const { data : sessionData } = await supabase.auth.getSession();
-    if(!sessionData?.session){
-    return data
+  let { data, error } = await supabase.auth.signUp({
+    email: email,
+    password: password,
+    options: {
+      data: {
+        username: username
+      }
     }
-  
-
-  const displayName = username || email.split('@')[0];
-
-  const { data : profileData, error : profileError } = await supabase.from('users').insert({
-    id: data.user.id,
-    username: displayName,
-    avatar_url: null,
   });
-  if(profileError){
-    console.error('Error creating user profile:', profileError);
-  }else{
-    console.log('User profile created successfully:', profileData);
-  }
+  if (error) throw error
+
+  if (data?.user) {
+    const { data: sessionData } = await supabase.auth.getSession();
+    if (!sessionData?.session) {
+      return data
+    }
+
+
+    const displayName = username || email.split('@')[0];
+
+    const { data: profileData, error: profileError } = await supabase.from('users').insert({
+      id: data.user.id,
+      username: displayName,
+      avatar_url: null,
+    });
+    if (profileError) {
+      console.error('Error creating user profile:', profileError);
+    } else {
+      console.log('User profile created successfully:', profileData);
+    }
 
   }
   return data
-  
+
 }
 
 export async function Signin(email, password) {
@@ -38,16 +43,16 @@ export async function Signin(email, password) {
     password: password
   });
 
-  if(error) throw error
+  if (error) throw error
 
-   if (data?.user) {
-     try {
-       const profile = await getUserProfile(data.user.id);
-       console.log("profile info ", profile);
-     } catch (profileError) {
-       console.error("Error with profile during signin:", profileError);
-     }
-   }
+  if (data?.user) {
+    try {
+      const profile = await getUserProfile(data.user.id);
+      console.log("profile info ", profile);
+    } catch (profileError) {
+      console.error("Error with profile during signin:", profileError);
+    }
+  }
   return data
 }
 
@@ -57,20 +62,32 @@ export async function getUserProfile(userId) {
     return null;
   }
   const { data: sessionData } = await supabase.auth.getSession();
-  const {data : userData, error} = await supabase.from('users')
-  .select('*')
-  .eq('id', userId)
-  .single();
+  const { data: userData, error } = await supabase.from('users')
+    .select('*')
+    .eq('id', userId)
+    .single();
 
-  if(error && error.code === 'PGRST116'){
+  if (error && error.code === 'PGRST116') {
     console.log('No Profile found. attempting to create one for user :', userId)
 
-    // get user email to drive username if needed
+    // get user email/metadata from sessionData or fallback to getUser()
+    const user = sessionData?.session?.user;
+    let email = user?.email;
+    let metadataUsername = user?.user_metadata?.username;
 
-    const email = userData?.email;
-    const defualtUsername = email ? email?.split('@')[0] : `user_${Date.now()}`;
+    if (!email) {
+      try {
+        const { data: { user: freshUser } } = await supabase.auth.getUser();
+        email = freshUser?.email;
+        metadataUsername = freshUser?.user_metadata?.username;
+      } catch (err) {
+        console.error("Error fetching fresh user details:", err);
+      }
+    }
+
+    const defualtUsername = metadataUsername || (email ? email.split('@')[0] : '');
     // create a profile for user
-     
+
     const { data: newProfile, error: newProfileError } = await supabase
       .from("users")
       .insert({
@@ -80,19 +97,17 @@ export async function getUserProfile(userId) {
       })
       .select()
       .single();
-    
-    
-
-    if(newProfileError){
+      
+    if (newProfileError) {
       console.error('Error creating user profile:', newProfileError);
-    }else{
+    } else {
       console.log('User profile created successfully:', newProfile);
     }
     return newProfile
   }
 
   // general error
-  if(error){
+  if (error) {
     console.error('Error fetching user profile:', error);
     throw error
   }
@@ -100,15 +115,15 @@ export async function getUserProfile(userId) {
 }
 
 
-export function onAuthChange (callback){
+export function onAuthChange(callback) {
   const { data } = supabase.auth.onAuthStateChange(
     async (event, session) => {
-    callback(event, session?.user || null)
-  })
+      callback(event, session?.user || null)
+    })
 
-  return ()=> data.subscription.unsubscribe();
+  return () => data.subscription.unsubscribe();
 }
 
-// export async function SignOut() {
-//   await supabase.auth.signOut();
-// }
+export async function SignOut() {
+  await supabase.auth.signOut();
+}

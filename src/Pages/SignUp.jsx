@@ -74,8 +74,8 @@ const SignUp = () => {
       {/* Form Card Container */}
       <div className="bg-white rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.05)] border border-gray-100 w-full max-w-115 p-8 md:p-10">
         {error && (
-          <div className="text-red-500 font-medium bg-rose-200 px-2 py-1 mb-3 rounded-lg transition-colors duration-200">
-            {error}
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-1 rounded relative mb-4">
+            <span className="block sm:inline">{error}</span>
           </div>
         )}
         <form className="space-y-5" onSubmit={handleSubmit}>

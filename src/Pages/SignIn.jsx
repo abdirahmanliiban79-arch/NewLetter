@@ -8,7 +8,7 @@ const SignIn = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
+  // const [success, setSuccess] = useState(false);
 
   const AuthInfo = useAuth();
   console.log({AuthInfo})
@@ -29,7 +29,9 @@ const SignIn = () => {
       
     } catch (error) {
       console.error('error',error)
-      setError(error.message)
+      setError(error.message || 'An error occurred. Please try again.');
+      setIsLoading(false)
+    }finally{
       setIsLoading(false)
     }
   }
@@ -48,6 +50,12 @@ const SignIn = () => {
 
       {/* Form Card Container */}
       <div className="bg-white rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.05)] border border-gray-100 w-full max-w-115 p-8 md:p-10">
+        {/* Error Message */}
+        {error && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-1 rounded relative mb-4">
+            <span className="block sm:inline">{error}</span>
+          </div>
+        )}
         <form className="space-y-5" onSubmit={handleSubmit}>
           {/* Email Address Field */}
           <div>
@@ -59,7 +67,7 @@ const SignIn = () => {
             </label>
             <input
               type="email"
-              name="email" 
+              name="email"
               autoComplete="email"
               id="email"
               value={email}
