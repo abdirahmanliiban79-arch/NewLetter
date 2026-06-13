@@ -12,6 +12,7 @@ import ManageArticles from "./Pages/ManageArticles";
 import Profile from "./Pages/Profile";
 import Editor from "./Pages/Editor";
 import { ProtectedRoute} from './components/ProtectedRoute';
+import { Toaster } from "react-hot-toast";
 function App() {
   return (
     <AuthProvider>
@@ -74,6 +75,8 @@ function App() {
       </main>
       {/* footer section */}
       <Footer />
+
+      <Toaster />
     </AuthProvider>
   );
 }
